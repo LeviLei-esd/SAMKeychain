@@ -248,57 +248,104 @@
 
 
 + (NSError *)errorWithCode:(OSStatus) code {
+#if SWIFT_PACKAGE
+	NSString *message = nil;
+#else
 	static dispatch_once_t onceToken;
 	static NSBundle *resourcesBundle = nil;
 	dispatch_once(&onceToken, ^{
 		NSURL *url = [[NSBundle bundleForClass:[SAMKeychainQuery class]] URLForResource:@"SAMKeychain" withExtension:@"bundle"];
 		resourcesBundle = [NSBundle bundleWithURL:url];
 	});
-	
 	NSString *message = nil;
+#endif
 	switch (code) {
 		case errSecSuccess: return nil;
+#if SWIFT_PACKAGE
+		case SAMKeychainErrorBadArguments: message = @"Some of the arguments were invalid"; break;
+#else
 		case SAMKeychainErrorBadArguments: message = NSLocalizedStringFromTableInBundle(@"SAMKeychainErrorBadArguments", @"SAMKeychain", resourcesBundle, nil); break;
+#endif
 
 #if TARGET_OS_IPHONE
 		case errSecUnimplemented: {
+#if SWIFT_PACKAGE
+			message = @"Function or operation not implemented";
+#else
 			message = NSLocalizedStringFromTableInBundle(@"errSecUnimplemented", @"SAMKeychain", resourcesBundle, nil);
+#endif
 			break;
 		}
 		case errSecParam: {
+#if SWIFT_PACKAGE
+			message = @"One or more parameters passed to a function were not valid";
+#else
 			message = NSLocalizedStringFromTableInBundle(@"errSecParam", @"SAMKeychain", resourcesBundle, nil);
+#endif
 			break;
 		}
 		case errSecAllocate: {
+#if SWIFT_PACKAGE
+			message = @"Failed to allocate memory";
+#else
 			message = NSLocalizedStringFromTableInBundle(@"errSecAllocate", @"SAMKeychain", resourcesBundle, nil);
+#endif
 			break;
 		}
 		case errSecNotAvailable: {
+#if SWIFT_PACKAGE
+			message = @"No keychain is available. You may need to restart your computer";
+#else
 			message = NSLocalizedStringFromTableInBundle(@"errSecNotAvailable", @"SAMKeychain", resourcesBundle, nil);
+#endif
 			break;
 		}
 		case errSecDuplicateItem: {
+#if SWIFT_PACKAGE
+			message = @"The specified item already exists in the keychain";
+#else
 			message = NSLocalizedStringFromTableInBundle(@"errSecDuplicateItem", @"SAMKeychain", resourcesBundle, nil);
+#endif
 			break;
 		}
 		case errSecItemNotFound: {
+#if SWIFT_PACKAGE
+			message = @"The specified item could not be found in the keychain";
+#else
 			message = NSLocalizedStringFromTableInBundle(@"errSecItemNotFound", @"SAMKeychain", resourcesBundle, nil);
+#endif
 			break;
 		}
 		case errSecInteractionNotAllowed: {
+#if SWIFT_PACKAGE
+			message = @"User interaction is not allowed";
+#else
 			message = NSLocalizedStringFromTableInBundle(@"errSecInteractionNotAllowed", @"SAMKeychain", resourcesBundle, nil);
+#endif
 			break;
 		}
 		case errSecDecode: {
+#if SWIFT_PACKAGE
+			message = @"Unable to decode the provided data";
+#else
 			message = NSLocalizedStringFromTableInBundle(@"errSecDecode", @"SAMKeychain", resourcesBundle, nil);
+#endif
 			break;
 		}
 		case errSecAuthFailed: {
+#if SWIFT_PACKAGE
+			message = @"The user name or passphrase you entered is not correct";
+#else
 			message = NSLocalizedStringFromTableInBundle(@"errSecAuthFailed", @"SAMKeychain", resourcesBundle, nil);
+#endif
 			break;
 		}
 		default: {
+#if SWIFT_PACKAGE
+			message = @"Refer to SecBase.h for description";
+#else
 			message = NSLocalizedStringFromTableInBundle(@"errSecDefault", @"SAMKeychain", resourcesBundle, nil);
+#endif
 		}
 #else
 		default:
